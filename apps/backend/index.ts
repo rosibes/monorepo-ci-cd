@@ -8,7 +8,7 @@ app.use(express.json());
 app.get("/users", (req, res) => {
   prismaClient.user.findMany()
     .then(users => {
-      res.json({users});
+      res.json(users);
     })
     .catch(err => {
       res.status(500).json({ error: err.message });
@@ -17,7 +17,7 @@ app.get("/users", (req, res) => {
 
 app.post("/user", (req, res) => {
   const { username, password } = req.body;
-  
+
   if (!username || !password) {
     res.status(400).json({ error: "Username and password are required" });
     return
