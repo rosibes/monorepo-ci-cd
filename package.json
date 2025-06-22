@@ -9,8 +9,8 @@
     "check-types": "turbo run check-types",
     "db:generate": "cd packages/db && bunx prisma generate && cd ../..",
     "db:migrate": "cd packages/db && bunx prisma migrate deploy && cd ../..",
-    "start:backend": "cd apps/backend && bun run start",
-    "start:ws": "cd apps/websocket && bun run start",
+    "start:backend": "until bun run db:migrate; do sleep 5; done && cd apps/backend && bun run start",
+    "start:ws": "until bun run db:migrate; do sleep 5; done && cd apps/websocket && bun run start",
     "start:frontend": "until bun run db:migrate; do sleep 5; done && bun run db:generate && cd apps/web && bun run dev"
   },
   "devDependencies": {

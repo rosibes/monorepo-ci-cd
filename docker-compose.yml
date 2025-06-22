@@ -15,8 +15,6 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.frontend
-      args:
-         - DATABASE_URL=postgresql://postgres:mysecretpassword@postgres:5432/postgres
     ports:
       - 3000:3000
     environment:
@@ -39,5 +37,3 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=mysecretpassword
-
-

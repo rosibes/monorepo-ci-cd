@@ -10,8 +10,8 @@ Bun.serve({
         return new Response("Upgrade failed", { status: 500 });
     },
     websocket: {
-        message(ws, message) {
-            prismaClient.user.create({
+        async message(ws, message) {
+            await prismaClient.user.create({
                 data: {
                     username: Math.random().toString(),
                     password: Math.random().toString()
