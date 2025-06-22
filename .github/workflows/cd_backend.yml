@@ -20,4 +20,4 @@ jobs:
           context: .
           file: ./docker/Dockerfile.backend
           push: true
-          tags: app-backend:${{ github.sha }}
+          tags: rosibes/app-backend:${{ github.sha }}
