@@ -32,5 +32,5 @@ jobs:
               sleep 10
             fi &&
             docker stop app_fe || true && docker rm app_fe || true &&
-            docker run --name app_fe --network app-network -d -p 3000:3000 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' HOSTNAME='0.0.0.0' rosibes/app-frontend:${{ github.sha }}
+            docker run --name app_fe --network app-network -d -p 3000:3000 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' -e HOSTNAME='0.0.0.0' rosibes/app-frontend:${{ github.sha }}
           "
