@@ -24,7 +24,5 @@ jobs:
       - name: Deploy to the VM
         run: | 
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
-          mkdir -p /home/runner/.ssh
-          ls /home/runner/ssh
-          chmod 700 /home/runner/ssh_keygen
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_keygen ubuntu@18.234.144.102 -t "docker stop app_backend && docker run --name user_backend -d -p 8080:8080 rosibes/app-backend:${{ github.sha }}"
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.234.144.102 -t "docker stop app_backend && docker run --name app_backend -d -p 8080:8080 rosibes/app-backend:${{ github.sha }}"
