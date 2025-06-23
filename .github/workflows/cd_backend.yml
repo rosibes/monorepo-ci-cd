@@ -25,10 +25,13 @@ jobs:
         run: | 
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 600 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.234.144.102
-          docker network create app-network || true
-          docker stop postgres || true && docker rm postgres || true
-          docker run --name postgres --network app-network -d -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres:15
-          sleep 5
-          docker stop app_backend || true && docker rm app_backend || true
-          docker run --name app_backend --network app-network -d -p 8080:8080 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' rosibes/app-backend:${{ github.sha }}
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.234.144.102 "
+            docker network create app-network || true &&
+            docker stop postgres || true && docker rm postgres || true &&
+            docker run --name postgres --network app-network -d -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres:15 &&
+            sleep 5 &&
+            docker stop app_backend || true && docker rm app_backend || true &&
+            docker run --name app_backend --network app-network -d -p 8080:8080 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' rosibes/app-backend:${{ github.sha }}' &&
+            sleep 5 &&
+            docker exec app_backend bun run db:migrate
+          " 
