@@ -21,7 +21,7 @@ jobs:
           file: ./docker/Dockerfile.backend
           push: true
           tags: rosibes/app-backend:${{ github.sha }}
-        - name: Deploy to the VM
+        - name: Deploy to the Virtual Machine
         run: | 
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 600 ~/ssh_key
