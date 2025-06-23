@@ -21,3 +21,23 @@ jobs:
           file: ./docker/Dockerfile.ws
           push: true
           tags: rosibes/app-ws:${{ github.sha }}
+      - name: Deploy to VM
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+          chmod 600 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.234.144.102 "
+            docker network create app-network || true &&
+            # Verifică dacă containerul postgres există, dacă nu, creează-l
+            if ! docker ps | grep -q postgres; then
+              docker run --name postgres --network app-network -d -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres:15
+              sleep 10
+            fi &&
+            docker stop app_ws || true && docker rm app_ws || true &&
+            docker run --name app_ws --network app-network -d -p 8081:8081 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' rosibes/app-ws:${{ github.sha }}
+          "
+
+
+
+
+
+      
