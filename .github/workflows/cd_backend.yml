@@ -21,3 +21,8 @@ jobs:
           file: ./docker/Dockerfile.backend
           push: true
           tags: rosibes/app-backend:${{ github.sha }}
+      - name: Deploy to the VM
+        run: | 
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+          chmod 700 /home/runner/ssh_keygen
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_keygen ubuntu@18.234.144.102 -t "docker stop app_backend && docker run --name user_backend -d -p 8080:8080 rosibes/app-backend:${{ github.sha }}"
