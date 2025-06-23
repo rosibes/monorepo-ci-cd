@@ -21,7 +21,7 @@ jobs:
           file: ./docker/Dockerfile.backend
           push: true
           tags: rosibes/app-backend:${{ github.sha }}
-      - name: Deploy to the VM
+        - name: Deploy to the VM
         run: | 
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 600 ~/ssh_key
@@ -31,7 +31,7 @@ jobs:
             docker run --name postgres --network app-network -d -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres:15 &&
             sleep 5 &&
             docker stop app_backend || true && docker rm app_backend || true &&
-            docker run --name app_backend --network app-network -d -p 8080:8080 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' rosibes/app-backend:${{ github.sha }}' &&
+            docker run --name app_backend --network app-network -d -p 8080:8080 -e DATABASE_URL='postgresql://postgres:mysecretpassword@postgres:5432/postgres' rosibes/app-backend:${{ github.sha }} &&
             sleep 5 &&
             docker exec app_backend bun run db:migrate
-          " 
+          "
